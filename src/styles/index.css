@@ -1,1 +1,2 @@
-html, body {margin: 0;padding: 0;}
+html, body {margin: 0;padding: 0;background: #f6f9fc;}
+.MuiCard-root:hover .MuiCardMedia-root div {bottom: 10px;}
