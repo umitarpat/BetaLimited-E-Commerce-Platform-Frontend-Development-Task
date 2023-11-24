@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Box, Grid, Card, CardMedia, CardContent, Typography } from "@mui/material";
+import { Container, Box, Grid } from "@mui/material";
 import ProductBox from './productBox'
 
 const ProductList = () => {    
 
     const [products, setProducts] = useState([]);
-
     const getData = async () => {
         const { data } = await axios.get(`https://linkedin-cv-crawler.beta-limited.workers.dev/interview/products`);
         setProducts(data);
-      };
+    };
 
     useEffect(() => {
         getData();        

@@ -2,7 +2,10 @@ import { Box, Button, Card, CardActionArea, CardContent, CardMedia, Grid, Rating
 import { Star, Remove, Add, Visibility, ShoppingCart, Favorite } from "@mui/icons-material";
 import { Colors, Utils } from "../../styles/theme";
 import { useState } from "react";
+import axios from "axios";
 import styled from "@emotion/styled";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart, deleteToCart } from "../../store/cart";
 
 const AcitonButtonsArea = styled('div')(({theme}) => ({
     display: 'flex',
@@ -33,7 +36,14 @@ const AcitonButtonsArea = styled('div')(({theme}) => ({
 }));
 
 const ProductBox = ({product}) => {
-    const [qty, setQty] = useState(0);
+    
+    const quantity = useSelector(
+        state => state.cart.cart
+    );
+    const qt = quantity
+    .filter((item => item.id === product.id))
+    .map(item => { return item.qty })
+    const [qty, setQty] = useState(qt[0] ? qt[0] : 0);
 
     const inCreaseHandler = () => {
         setQty(qty+1);
@@ -41,7 +51,61 @@ const ProductBox = ({product}) => {
 
     const deCreaseHandler = () => {
         setQty(qty-1);
+        if(qty === 1) deleteToCartHandler();   
     }
+
+    const sessionID = useSelector(state => state.auth.sessionID);
+    const dispatch = useDispatch();
+    const addToCartHandler = async () => {
+
+        if(qty === 0) {
+            alert('Please select product quantity!');
+            return;
+        }
+        const postData = {
+            id: product.id,
+        };
+          
+        const axiosConfig = {
+            headers: {
+                'Session-ID': sessionID,
+            }
+        };
+        await axios.post(`https://linkedin-cv-crawler.beta-limited.workers.dev/interview/add-to-cart`, postData, axiosConfig )
+        .then((res) => {
+            if(res.status === 200) {
+                dispatch(addToCart({
+                    id: product.id,
+                    qty: qty,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image
+                }));
+            }
+        });
+        
+    }
+
+    const deleteToCartHandler = async () => {
+
+        const postData = {
+            id: product.id,
+        };
+          
+        const axiosConfig = {
+            headers: {
+                'Session-ID': sessionID,
+            }
+        };
+        await axios.post(`https://linkedin-cv-crawler.beta-limited.workers.dev/interview/subtract-from-cart`, postData, axiosConfig )
+        .then((res) => {
+            if(res.status === 200) {
+                dispatch(deleteToCart(product));
+            }
+        });
+        
+    }
+
     
     return(
         <Grid item xs={12} sm={6} md={4}>
@@ -75,7 +139,7 @@ const ProductBox = ({product}) => {
                     <Button size="small">
                         <Favorite></Favorite>
                     </Button>
-                    <Button size="small">
+                    <Button size="small" onClick={addToCartHandler}>
                         <ShoppingCart></ShoppingCart>
                     </Button>
                 </AcitonButtonsArea>

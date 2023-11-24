@@ -1,6 +1,8 @@
-import { Button, ButtonBase, InputBase, styled } from "@mui/material";
+import { ButtonBase, InputBase, styled } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { Colors } from "../../styles/theme";
+import { useState} from "react";
+import { useNavigate  } from "react-router-dom";
 
 const SearchContainer = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -45,6 +47,9 @@ const SearchContainer = styled('div')(({ theme }) => ({
   }));
 
 export default function Search() {
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+
   return(
     <SearchContainer>
         <SearchIconWrapper>
@@ -53,8 +58,11 @@ export default function Search() {
         <StyledInputBase
             placeholder="Search…"
             inputProps={{ 'aria-label': 'search' }}
-            />
-          <StyledButton>Search</StyledButton>
+            onChange={(e) => {
+              setSearch(e.target.value)
+            }}
+        />
+        <StyledButton onClick={() => navigate(`/search?query=${search}`)}>Search</StyledButton>
     </SearchContainer>
 );
 };
