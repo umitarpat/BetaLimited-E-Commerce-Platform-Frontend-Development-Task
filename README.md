@@ -1,3 +1,12 @@
+# The following technologies were used in this project
+#ReactJs
+#React Router
+#Redux-Toolkit
+#Axios
+#MUI
+
+[click](https://beta-limited-e-commerce-platform-frontend-development-task-zeta.vercel.app/) for demo
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
