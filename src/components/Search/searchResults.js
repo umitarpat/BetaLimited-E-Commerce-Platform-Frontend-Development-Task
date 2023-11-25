@@ -25,6 +25,12 @@ export const SearchResults = () => {
     <Box sx={{ bgcolor: 'transparent', pt: 4, pb: 4 }}>
     <Container maxWidth="lg">
         <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <h3 style={{ 
+            margin: 0,
+            fontWeight: 'normal' 
+          }}>Results for search <b>{query}</b></h3>
+        </Grid>     
         {searchResults.map((item) => (
           <ProductBox key={item.id} product={item} />
         ))}
